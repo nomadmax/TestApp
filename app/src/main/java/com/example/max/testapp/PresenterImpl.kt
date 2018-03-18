@@ -24,6 +24,7 @@ class PresenterImpl: Mvp.Presenter {
     private val idGenerator = AtomicInteger(0)
     private val nextId: Int get() = idGenerator.incrementAndGet()
     private val opCount = AtomicInteger(0)
+    private var scrollPosition: Int = 0
 
     init {
         events.subscribe({
@@ -40,6 +41,11 @@ class PresenterImpl: Mvp.Presenter {
         //            generateList()
         //        }
                 state.accept(State.ListUpdate(list))
+                state.accept(State.ScrollTo(scrollPosition))
+                state.accept(State.ShowProgressBar(opCount.get() != 0))
+            }
+            is Event.SaveScrollPosition -> {
+                scrollPosition = event.pos
             }
             Event.FabClick -> {
                 opCount.getAndIncrement()

@@ -28,6 +28,7 @@ sealed class State{
     data class ListUpdate(val list: List<ItemViewModel>) : State()
     data class Error(val throwable: Throwable): State()
     data class ShowUnDeleteSnackBar(val item: ItemViewModel): State()
+    data class ScrollTo(val scrollPosition: Int) : State()
 }
 sealed class Event {
     object FabClick : Event()
@@ -36,6 +37,7 @@ sealed class Event {
     data class UnDeleteItemClick(val item: ItemViewModel) : Event()
     data class AddItem(val item: ItemViewModel): Event()
     data class RemoveItem(val item: ItemViewModel): Event()
+    data class SaveScrollPosition(val pos: Int) : Event()
 }
 
 data class ItemViewModel(val id: Int,

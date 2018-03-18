@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity(), Mvp.View {
     override val disposable: CompositeDisposable = CompositeDisposable()
 
     private lateinit var presenter: Mvp.Presenter
-    private lateinit var layoutManager: RecyclerView.LayoutManager
+    private lateinit var layoutManager: LinearLayoutManager
     private val adapter = RecyclerAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +75,9 @@ class MainActivity : AppCompatActivity(), Mvp.View {
             is State.ListUpdate -> {
                 adapter.dataSet = state.list
             }
+            is State.ScrollTo -> {
+                recycler.scrollToPosition(state.scrollPosition)
+            }
             is State.Error -> {
                 renderError(state.throwable)
             }
@@ -93,6 +96,7 @@ class MainActivity : AppCompatActivity(), Mvp.View {
 
     override fun onRetainCustomNonConfigurationInstance(): Any {
         super.onRetainCustomNonConfigurationInstance()
+        presenter.events.accept(Event.SaveScrollPosition(layoutManager.findFirstVisibleItemPosition()))
         return presenter
     }
 
